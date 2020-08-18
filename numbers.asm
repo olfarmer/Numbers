@@ -4,6 +4,8 @@ section	.data
 section .text
 
 global _start
+extern printf
+
 _start:
 	mov	rax,1
 	mov	rdi,1
@@ -11,15 +13,14 @@ _start:
 	mov	rdx, 12
 	syscall
 
-	;call	_calc
-	mov	rsi, 1	
+	call	_calc
 
+        mov     rdi, rax
+        mov     al, 0
+        
+        call    printf
+        
 
-	;mov	rsi,rax
-	mov	rdi,1
-	mov	rax,1
-	mov	rdx,1
-	syscall
 
 	mov	rax, 60
 	mov	rdi, 0
@@ -27,17 +28,18 @@ _start:
 
 _calc:			;Calculating numbers
 	mov	r8,16
-	mov	r9,1
-	mov	r10,1
+	mov	r9,0
+	mov	r10,0
 	
-_loop:	mov	rax,r9
-	mul	r10
-	
-	add	r9,1
+_loop:	
+        add	r9,1
 	add	r10,1
 
+        mov	rax,r9
+	mul	r10
+	
 	cmp	rax,r8
 	jne	_loop
 
-	mov	rax,r8
+	mov	rax,r9
 	ret
