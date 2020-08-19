@@ -3,7 +3,7 @@ extern exit
 
 section	.data
 	message db "Starting...", 10
-fmt:    db "a=%ld", 10, 0
+fmt:    db "a=%ld, b=%ld", 10, 0
 
 section .text
 
@@ -20,8 +20,8 @@ _start:
 	call	_calc
 
         mov     rdi, fmt
-        mov     rsi, rax
-
+        mov     rsi, r9
+        mov     rdx, r10
         
         mov     rax, 0
         
@@ -32,19 +32,33 @@ _start:
 
 
 _calc:			;Calculating numbers
-	mov	r8,16
+        push    rbx
+	mov	r8,1635854315
 	mov	r9,0
 	mov	r10,0
 	
 _loop:	
         add	r9,1
-	add	r10,1
+        
+        cmp     r9,r8   ;loop condition
+        je      _endloop
+        
+        mov     r10,0   ;innerLoop cleanup
+        
+_innerLoop:
+        add	r10,1
+        cmp     r10,r8  ;innerLoop condition
+        je      _loop
+        
+	
 
         mov	rax,r9
 	mul	r10
 	
 	cmp	rax,r8
-	jne	_loop
+	jne	_innerLoop
 
-	mov	rax,r9
+_endloop:
+        pop     rbx
+        mov	rax,r9
 	ret
