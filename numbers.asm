@@ -1,10 +1,14 @@
+extern printf
+extern exit
+
 section	.data
 	message db "Starting...", 10
+fmt:    db "a=%ld", 10, 0
 
 section .text
 
 global _start
-extern printf
+
 
 _start:
 	mov	rax,1
@@ -15,16 +19,17 @@ _start:
 
 	call	_calc
 
-        mov     rdi, rax
-        mov     al, 0
+        mov     rdi, fmt
+        mov     rsi, rax
+
+        
+        mov     rax, 0
         
         call    printf
         
+        call    exit    ;needed to flush stdout
 
 
-	mov	rax, 60
-	mov	rdi, 0
-	syscall
 
 _calc:			;Calculating numbers
 	mov	r8,16
